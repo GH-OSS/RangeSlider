@@ -174,6 +174,8 @@ public class RangeSlider: UIControl {
             upperThumbLayer.setNeedsDisplay()
         }
     }
+
+    public var updatesContinuously: Bool = true
     
     fileprivate var previouslocation = CGPoint()
     
@@ -226,7 +228,7 @@ public class RangeSlider: UIControl {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
-        trackLayer.frame = bounds.insetBy(dx: 0.0, dy: bounds.height/3)
+        trackLayer.frame = bounds.insetBy(dx: 0.0, dy: bounds.height/2 - 2)
         trackLayer.setNeedsDisplay()
         
         let lowerThumbCenter = CGFloat(positionForValue(lowerValue))
@@ -280,8 +282,10 @@ public class RangeSlider: UIControl {
         } else if upperThumbLayer.highlighted {
             upperValue = boundValue(upperValue + deltaValue, toLowerValue: lowerValue + gapBetweenThumbs, upperValue: maximumValue)
         }
-        
-        sendActions(for: .valueChanged)
+
+        if updatesContinuously {
+            sendActions(for: .valueChanged)
+        }
         
         return true
     }
@@ -289,5 +293,7 @@ public class RangeSlider: UIControl {
     override public func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         lowerThumbLayer.highlighted = false
         upperThumbLayer.highlighted = false
+
+        sendActions(for: .valueChanged)
     }
 }
