@@ -296,4 +296,32 @@ public class RangeSlider: UIControl {
 
         sendActions(for: .valueChanged)
     }
+    
+    public override func cancelTracking(with event: UIEvent?) {
+        defer {
+            lowerThumbLayer.highlighted = false
+            upperThumbLayer.highlighted = false
+            
+            sendActions(for: .valueChanged)
+        }
+        
+        guard let touch = event?.allTouches?.first else {
+            return
+        }
+        
+        let location = touch.location(in: self)
+        
+        // Determine by how much the user has dragged
+        let deltaLocation = Double(location.x - previouslocation.x)
+        let deltaValue = (maximumValue - minimumValue) * deltaLocation / Double(bounds.width - bounds.height)
+        
+        previouslocation = location
+        
+        // Update the values
+        if lowerThumbLayer.highlighted {
+            lowerValue = boundValue(lowerValue + deltaValue, toLowerValue: minimumValue, upperValue: upperValue - gapBetweenThumbs)
+        } else if upperThumbLayer.highlighted {
+            upperValue = boundValue(upperValue + deltaValue, toLowerValue: lowerValue + gapBetweenThumbs, upperValue: maximumValue)
+        }
+    }
 }
