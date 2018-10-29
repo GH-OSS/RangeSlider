@@ -37,6 +37,7 @@ The range slider can be customized and information can be accessed through these
   + `thumbBorderColor`: The thumb border color
   + `thumbBorderWidth`: The width of the thumb border
   + `curvaceousness` : From 0.0 for square thumbs to 1.0 for circle thumbs
+  + `updatesContinuously` : If set to `true`, `UIControlEvent.ValueChanged` is emitted when moving the thumb. If set to `false`, `UIControlEvent.ValueChanged` is emitted only when releasing the thumb.
 
 ## Installation
 
